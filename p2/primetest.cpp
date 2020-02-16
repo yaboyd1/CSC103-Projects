@@ -7,15 +7,36 @@
  * NOT mean it is okay to COPY THAT SOURCE.  What you submit here **MUST BE
  * YOUR OWN WORK**.
  * References:
- *
+ * readme.html
  */
 
 #include <iostream>
-using std::cin;
-using std::cout;
-using std::endl;
+#include <cmath>
+using namespace std;
 
 int main()
 {
-	return 0;
+ unsigned long input;
+
+ while (cin >> input) {
+
+  //Initializeing as prime
+  int isPrime = 1;
+
+  //If even and not 2, not prime
+  if (input % 2 == 0 && input != 2) {
+   isPrime = 0;
+  }
+
+  //Checking all odd numbers up to the square root
+  for (int i = 3; i < sqrt(input) + 1; i+=2) {
+   if (input % i == 0)
+    isPrime = 0;
+  }
+
+  cout << isPrime << endl;
+
+ }
+
+ return 0;
 }

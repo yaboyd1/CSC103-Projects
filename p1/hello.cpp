@@ -7,7 +7,8 @@
  * NOT mean it is okay to COPY THAT SOURCE.  What you submit here **MUST BE
  * YOUR OWN WORK**.
  * References:
- * readme.html
+ * Used the temnplate from readme.html
+ * The website showed me how to save/compile my code.
  * https://www-cs.ccny.cuny.edu/~wes/CSC103/commandline.html
  * Ash showed me namepace.
  * Zafrul helped fix my bugs regarding the getline function.
