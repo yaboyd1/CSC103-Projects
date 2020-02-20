@@ -292,10 +292,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-4"><a href="#cb8-4"></a>}</span></code></pre></div>
 <p>You can think of the expression <code>cin &gt;&gt; n</code> evaluating to <code>false</code> as a boolean when the user enters a non-integer, or when the end of an input stream is encountered, and <code>true</code> if it successfully read a number into <code>n</code>. At first, you may find it a little strange to interpret a <code>cin</code> statement as a boolean, but do you remember our <code>if(x=23) {...}</code> example from class where we accidentally left out an equals sign? This is much the same. As with (almost<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>) any other expression in C++, <code>cin &gt;&gt; n</code> <em>has a datatype and a value</em>, and any expression that can be converted to an integer or boolean can be used for conditional statements like <code>while(...)</code>.</p>
 <p>One more thing that may be of use is the <a href="http://en.cppreference.com/w/cpp/language/break">break statement</a>. This is a convenient way to stop a loop, rather than explicitly manipulating the variables in the condition that it tests. For example, once you find a non-trivial divisor of the number you’re testing, you may want to immediately end the inner loop, since you know at that point that the number isn’t prime.</p>
-<p><strong>Makefiles:</strong> I gave you a makefile this time. Using the tutorials (<a href="https://web.archive.org/web/20160609213824/http://capone.mtsu.edu/csdept/FacilitiesAndResources/make.htm">here</a> and <a href="https://web.archive.org/web/20171220210007/http://www.cs.umd.edu/class/fall2002/cmsc214/Tutorial/makefile.html">here</a>), try to reverse engineer it if you have time. It is overly-simplistic, but pretty easy to follow.</p>
+<p><strong>Makefiles:</strong> I gave you a makefile this time. Using the tutorials (<a href="https://web.archive.org/web/20160609213824/http://capone.mtsu.edu/csdept/FacilitiesAndResources/make.htm">here</a> and <a href="https://web.archive.org/web/20171220210007/http://www.cs.umd.edu/class/fall2002/cmsc214/Tutorial/makefile.html">here</a>), try to reverse engineer it if you have time. It is overly-simplistic, but pretty easy to follow. <strong>Reminder:</strong> to compile <code>primetest.cpp</code> into executable code named <code>primetest</code>, just run the command:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a>$ <span class="fu">make</span></span></code></pre></div>
 <h2 id="testing-debugging-your-code">Testing + Debugging Your Code</h2>
 <p>To make things easier for you, a test procedure comes with the homework. The file <code>somenumbers</code> contains a list of test input, and <code>rightanswers</code> has a precomputed list of answers. Once you have your program working well enough to test, just run <code>make &amp;&amp; ./sanitycheck.sh</code> from within the directory, and it will tell you if anything goes wrong. You can also just run</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a>$ <span class="ex">gvimdiff</span> -f <span class="op">&lt;(</span><span class="ex">./primetest</span> <span class="op">&lt;</span> somenumbers<span class="op">)</span> rightanswers</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a>$ <span class="ex">gvimdiff</span> -f <span class="op">&lt;(</span><span class="ex">./primetest</span> <span class="op">&lt;</span> somenumbers<span class="op">)</span> rightanswers</span></code></pre></div>
 <p>And it will show you where the differences are in the outputs. (Note the fancy “process substitution”… useful!) <strong>Note:</strong> the test is “fragile” in some sense – make sure you don’t print <em>anything</em> besides a <code>0/1</code> for each number read from <code>stdin</code>. Any extra messages, or even extra blank lines, could make the test fail.</p>
 <h3 id="debugging">Debugging</h3>
 <p>Should something go wrong and your output is different than what it is supposed to be, don’t panic and don’t get frustrated! Here are some (fairly general) steps you can take to fix your program. Think of what follows as part II of the <a href="https://www-cs.ccny.cuny.edu/~wes/CSC103/gdb.html">gdb tutorial</a> (which you should read first!).</p>
@@ -306,32 +307,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Open another terminal (this will be for your program’s output<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>) and from this new terminal run <code>$ tty</code>. You should see something like <code>/dev/pts/3</code>. I’ll use this value – adjust as needed in what follows.</li>
 <li>Start <code>gdb</code> with <code>$ gdb -tty /dev/pts/3 primetest</code>, and then enter the following gdb commands:</li>
 </ol>
-<div class="sourceCode" id="cb10"><pre class="sourceCode apache"><code class="sourceCode apache"><span id="cb10-1"><a href="#cb10-1"></a>(gdb) tui enable</span>
-<span id="cb10-2"><a href="#cb10-2"></a>(gdb) break main</span>
-<span id="cb10-3"><a href="#cb10-3"></a>(gdb) run &lt;&lt;&lt;&quot;9&quot;</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode apache"><code class="sourceCode apache"><span id="cb11-1"><a href="#cb11-1"></a>(gdb) tui enable</span>
+<span id="cb11-2"><a href="#cb11-2"></a>(gdb) break main</span>
+<span id="cb11-3"><a href="#cb11-3"></a>(gdb) run &lt;&lt;&lt;&quot;9&quot;</span></code></pre></div>
 <p><em>NOTE:</em> the <code>&lt;&lt;&lt;"9"</code> gives your program the string <code>"9"</code> as <code>stdin</code>, as if you had typed it. Remember to change it to whatever inputs fail for you. You can test more numbers by adding them to that string (e.g., <code>&lt;&lt;&lt;"9 16 25"</code>), or storing them in a file and using <code>run &lt; filewithnumbers</code> instead.</p>
 <p>You should now have your code at the top of the window, stopped at the first line of <code>main()</code>. Now let’s set <code>gdb</code> to print some of your interesting variables each time the program is paused (see <a href="https://sourceware.org/gdb/onlinedocs/gdb/Auto-Display.html">automatic display</a> in the <code>gdb</code> documentation).</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode apache"><code class="sourceCode apache"><span id="cb11-1"><a href="#cb11-1"></a>(gdb) display n</span>
-<span id="cb11-2"><a href="#cb11-2"></a>(gdb) display k</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode apache"><code class="sourceCode apache"><span id="cb12-1"><a href="#cb12-1"></a>(gdb) display n</span>
+<span id="cb12-2"><a href="#cb12-2"></a>(gdb) display k</span></code></pre></div>
 <p>You can also display <em>expressions</em> which might be useful, e.g. <code>display n%k</code>. Now we can step through the program and with any luck, see why / how it is broken. Just use the <code>next</code> command and keep hitting enter, and you can walk through your code one statement at a time, printing the “interesting” variable contents as you go.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode apache"><code class="sourceCode apache"><span id="cb12-1"><a href="#cb12-1"></a>(gdb) next</span>
-<span id="cb12-2"><a href="#cb12-2"></a>1: n = 9</span>
-<span id="cb12-3"><a href="#cb12-3"></a>2: k = 3</span>
-<span id="cb12-4"><a href="#cb12-4"></a>3: n%k = 0</span>
-<span id="cb12-5"><a href="#cb12-5"></a>...</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode apache"><code class="sourceCode apache"><span id="cb13-1"><a href="#cb13-1"></a>(gdb) next</span>
+<span id="cb13-2"><a href="#cb13-2"></a>1: n = 9</span>
+<span id="cb13-3"><a href="#cb13-3"></a>2: k = 3</span>
+<span id="cb13-4"><a href="#cb13-4"></a>3: n%k = 0</span>
+<span id="cb13-5"><a href="#cb13-5"></a>...</span></code></pre></div>
 <p>Remember: when you hit a <code>cout</code> statement, what you print will appear in that other terminal, not in the <code>gdb</code> window. <em>NOTE:</em> you can save a little space by wrapping those variables into an array (if they all have the same datatype!). Try this:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode apache"><code class="sourceCode apache"><span id="cb13-1"><a href="#cb13-1"></a>(gdb) undisplay</span>
-<span id="cb13-2"><a href="#cb13-2"></a>Delete all auto-display expressions? (y or n) y</span>
-<span id="cb13-3"><a href="#cb13-3"></a>(gdb) display {n,k,n%k}</span>
-<span id="cb13-4"><a href="#cb13-4"></a>4: {n,k,n%k} = {9, 3, 0}</span>
-<span id="cb13-5"><a href="#cb13-5"></a>(gdb) next</span>
-<span id="cb13-6"><a href="#cb13-6"></a>4: {n,k,n%k} = {9, 3, 0}</span>
-<span id="cb13-7"><a href="#cb13-7"></a>...</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode apache"><code class="sourceCode apache"><span id="cb14-1"><a href="#cb14-1"></a>(gdb) undisplay</span>
+<span id="cb14-2"><a href="#cb14-2"></a>Delete all auto-display expressions? (y or n) y</span>
+<span id="cb14-3"><a href="#cb14-3"></a>(gdb) display {n,k,n%k}</span>
+<span id="cb14-4"><a href="#cb14-4"></a>4: {n,k,n%k} = {9, 3, 0}</span>
+<span id="cb14-5"><a href="#cb14-5"></a>(gdb) next</span>
+<span id="cb14-6"><a href="#cb14-6"></a>4: {n,k,n%k} = {9, 3, 0}</span>
+<span id="cb14-7"><a href="#cb14-7"></a>...</span></code></pre></div>
 <p>Hopefully this will help you figure it out!</p>
 <h2 id="submission-procedure">Submission Procedure</h2>
 <p>Assuming you have the <code>postdata</code> file all set with your info,<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> just run:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a>$ <span class="bu">cd</span> ~/csc103-projects/</span>
-<span id="cb14-2"><a href="#cb14-2"></a>$ <span class="ex">./submit.sh</span> p2/primetest.cpp</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a>$ <span class="bu">cd</span> ~/csc103-projects/</span>
+<span id="cb15-2"><a href="#cb15-2"></a>$ <span class="ex">./submit.sh</span> p2/primetest.cpp</span></code></pre></div>
 <p>If you see a green message saying something about “success”, then it worked. A receipt will be stored in a file named <code>primetest.cpp-rcpt.html</code>.</p>
 <p><em>Note:</em> you can also use the <a href="https://www-cs.ccny.cuny.edu/~wes/CSC103/upload.html">online form</a> if that is more convenient. A few <strong>important notes:</strong></p>
 <ul>
