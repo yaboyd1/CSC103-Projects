@@ -21,17 +21,18 @@ int main()
  while (cin >> input) {
 
   //Initializeing as prime
-  int isPrime = 1;
+  bool isPrime = true;
 
   //If even and not 2, not prime
-  if (input % 2 == 0 && input != 2) {
-   isPrime = 0;
+  //If 0 or 1, not prime
+  if ((input % 2 == 0 && input != 2) || input < 2) {
+   isPrime = false;
   }
 
   //Checking all odd numbers up to the square root
   for (int i = 3; i < sqrt(input) + 1; i+=2) {
    if (input % i == 0)
-    isPrime = 0;
+    isPrime = false;
   }
 
   cout << isPrime << endl;
